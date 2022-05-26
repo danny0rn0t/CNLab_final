@@ -1,4 +1,4 @@
-from flask import Flask, jsonfy
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 PORT = 5000
@@ -27,6 +27,6 @@ def query_records():
             }
         ]
     }
-    return jsonfy(data)
+    return jsonify(data)
 if __name__ == '__main__':
     app.run()

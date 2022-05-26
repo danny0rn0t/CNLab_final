@@ -5,6 +5,7 @@ import configparser
 import os
 from pymongo import MongoClient
 from flask_apscheduler import APScheduler
+from utils import query_server_for_record
 
 app = Flask(__name__)
 config = configparser.ConfigParser()
@@ -19,4 +20,6 @@ def kill_process():
     pass
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    path = f"{config['SERVER']['URL']}:{config['SERVER']['PORT']}/{config['SERVER']['INFO_PATH']}"
+    query_server_for_record(path)
