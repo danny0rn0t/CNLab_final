@@ -15,11 +15,11 @@ config.read(os.path.abspath(os.path.join(".ini")))
 def query_records():
     pass
 
-@app.route('/', methods='POST')
+@app.route('/', methods=['POST'])
 def kill_process():
     pass
 
 if __name__ == '__main__':
     # app.run()
-    path = f"{config['SERVER']['URL']}:{config['SERVER']['PORT']}/{config['SERVER']['INFO_PATH']}"
+    path = f"{config['SERVER']['base_url']}:{config['SERVER']['port']}/{config['SERVER']['info_path']}"
     query_server_for_record(path)
