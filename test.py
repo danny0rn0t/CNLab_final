@@ -12,7 +12,15 @@ print('###')
 client = MongoClient(config['PROD']['DB_URI'])
 db = client['cnlab']
 # collection = db['server_records']
-collection = db['server_records']['testuser']
+# collection = db['server_records']['testuser']
+collection = db['servers']
+item3 = {
+  'server _name': None,
+  'ip': '140.112.31.182',
+  'port': '5000',
+  'info_path': 'api/infoFetch',
+  'record': None
+}
 item2 = {
   'username': 'testuser',
   'password': '12345678'
@@ -40,7 +48,12 @@ item1 = {
     }
   ]
 }
-collection.find_one_and_update({}, item1)
+# collection.insert_one(item3)
+r = collection.find()
+for item in r:
+  print(item)
+# for item in r:
+#   collection.update_one({'_id': item['_id']}, {"$set": {"record": item1}})
 # r = collection.find_one({'username': 'testuser', 'password': '1245678'})
 # print(r)
 # print(type(r))

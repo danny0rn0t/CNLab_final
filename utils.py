@@ -1,6 +1,8 @@
 import requests
 import pymongo
 from flask import jsonify
+import sys
+import time
 
 def valid_user(db: pymongo.database.Database, username: str, password: str) -> bool:
     collection = db['users']
@@ -20,20 +22,26 @@ def gen_reponse(status, data='', error_message=''):
     }
     return jsonify(res)
 
-def query_server_for_record(url):
-    r = requests.get(url)
-    # print(r.status_code, type(r.status_code))
-    # print(r.json(), type(r.json()))
-    # print(r.json()['MEM_USE'], type(r.json()['MEM_USE']))
-    return r
+def get_records(db):
+    collection = db['servers']
+    data = []
+    for server in collection.find():
+        # print(server)
+        record = server['record']
+        if record is not None:
+            data.append(record)
+    print(data)
+    return data
 
-def update_records(servers):
-    for server in servers:
+def update_records(db):
+    collection = db['servers']
+    for server in collection.find():
         url = f"http://{server['ip']}:{server['port']}/{server['info_path']}"
-        r = query_server_for_record(url)
-    ''' 
-    TODO
-    update dp data
-    '''
-    pass
+        
+        r = requests.get(url)
+        if r.status_code != 200:
+            print(f"{time.ctime(time.time())} | query {url} got status code {r.status_code}", file=sys.stderr)
+            continue
+        collection.update_one({'_id': server['_id']}, {"$set": {"record": r.json()}})
+
 
