@@ -18,7 +18,7 @@ item3 = {
   'server _name': None,
   'ip': '140.112.31.182',
   'port': '5000',
-  'info_path': 'api/infoFetch',
+  'info_path': 'api/fetchInfo',
   'record': None
 }
 item2 = {
@@ -50,8 +50,8 @@ item1 = {
 }
 # collection.insert_one(item3)
 r = collection.find()
-for item in r:
-  print(item)
+for server in r:
+  collection.update_one()
 # for item in r:
 #   collection.update_one({'_id': item['_id']}, {"$set": {"record": item1}})
 # r = collection.find_one({'username': 'testuser', 'password': '1245678'})
