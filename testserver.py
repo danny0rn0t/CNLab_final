@@ -1,12 +1,21 @@
 from flask import Flask, jsonify
-
+import time
+import argparse
 app = Flask(__name__)
-PORT = 5000
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--host', type=str, default='0.0.0.0')
+    parser.add_argument('--port', type=int, default=5000)
+    parser.add_argument('--id', type=int, required=True)
+    args = parser.parse_args()
+    return args
 
 @app.route('/api/fetchInfo', methods=['GET'])
 def query_records():
     data = {
-        "host": 'Server1',
+        "time_stamp": time.ctime(time.time()),
+        "host": f'Server {args.id}',
         "CPUS": [0, 0, 10.9, 20],
         "MEM_USE": 4096,
         "MEM_TOT": 16384,
@@ -29,4 +38,5 @@ def query_records():
     }
     return jsonify(data)
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    args = parse_args()
+    app.run(host=args.port, port=args.port)

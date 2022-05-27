@@ -2,6 +2,7 @@ import configparser
 import os
 from pymongo import MongoClient
 import json
+import time
 
 config = configparser.ConfigParser()
 config.read(os.path.abspath(os.path.join(".ini")))
@@ -10,8 +11,14 @@ print(type(config['PROD']['DB_URI']))
 print('###')
 client = MongoClient(config['PROD']['DB_URI'])
 db = client['cnlab']
-collection = db['server_records']
+# collection = db['server_records']
+collection = db['server_records']['testuser']
+item2 = {
+  'username': 'testuser',
+  'password': '12345678'
+}
 item1 = {
+  'time': time.ctime(time.time()),
   "host": 'Server1',
   "CPUS": [0, 0, 10.9, 20],
   "MEM_USE": 4096,
@@ -33,6 +40,9 @@ item1 = {
     }
   ]
 }
-# collection.insert_one(item1)
-print(type(item1))
+collection.find_one_and_update({}, item1)
+# r = collection.find_one({'username': 'testuser', 'password': '1245678'})
+# print(r)
+# print(type(r))
+# print(type(item1))
 
