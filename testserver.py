@@ -7,7 +7,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--host', type=str, default='0.0.0.0')
     parser.add_argument('--port', type=int, default=5000)
-    parser.add_argument('--id', type=int, required=True)
+    parser.add_argument('--id', type=str, required=True)
     args = parser.parse_args()
     return args
 
@@ -39,4 +39,4 @@ def query_records():
     return jsonify(data)
 if __name__ == '__main__':
     args = parse_args()
-    app.run(host=args.port, port=args.port)
+    app.run(host=args.host, port=args.port)
