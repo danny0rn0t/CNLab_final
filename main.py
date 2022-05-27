@@ -19,7 +19,8 @@ def parse_args():
 @app.route('/server-records', methods=['GET'])
 def query_records():
     if not valid_user(db, requests.args.get('username'), requests.ars.get('password')):
-        return None
+        return gen_reponse('FAILED', error_message='Invalid user!')
+    
 
 @app.route('/', methods=['POST'])
 def kill_process():
