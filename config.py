@@ -3,7 +3,7 @@ class Config:
     DB_URI = 'mongodb+srv://root:root@cluster0.su9lnzy.mongodb.net/?retryWrites=true&w=majority'
     
     ''' api server configuration'''
-    api_server_record_path = 'api/infoFetch'
+    api_server_record_path = 'api/fetchInfo'
 
     ''' 
     default servers,

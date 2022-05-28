@@ -14,7 +14,7 @@ def parse_args():
 @app.route('/api/fetchInfo', methods=['GET'])
 def query_records():
     data = {
-        "time_stamp": time.ctime(time.time()),
+        "time_stamp": time.ctime(),
         "host": f'Server {args.id}',
         "CPUS": [0, 0, 10.9, 20],
         "MEM_USE": 4096,

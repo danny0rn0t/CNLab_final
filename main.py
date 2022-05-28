@@ -7,6 +7,7 @@ from pymongo import MongoClient
 from flask_apscheduler import APScheduler
 from utils import *
 import argparse
+import requests
 app = Flask(__name__)
 scheduler = APScheduler()
 
@@ -26,9 +27,23 @@ def query_records():
     return gen_reponse('SUCCESSED', data=data)
     
 
-@app.route('/', methods=['POST'])
+@app.route('/kill-process', methods=['POST'])
 def kill_process():
-    pass
+    username = request.values.get('username')
+    password = request.values.get('password')
+    if not valid_user(db, username, password):
+        return gen_reponse('FAILED', error_message='Invalid user!')
+    server_id = request.values.get('server_id')
+    pid = request.values.get('pid')
+    if server_id is None:
+        return gen_reponse('FAILED', error_message='Missing server_id!')
+
+    collection = db['servers']
+    server = collection.find_one({'server_id': server_id})
+    if server is None:
+        return gen_reponse('FAILED', error_message=f'Server with server_id={server_id} not found!')
+    
+
 
 if __name__ == '__main__':
     ''' set up configs '''

@@ -4,6 +4,7 @@ from flask import jsonify
 import sys
 import time
 from config import Config
+from uuid import uuid4
 
 def init_db(db, config: Config):
     '''
@@ -19,10 +20,9 @@ def init_db(db, config: Config):
     collection = db['servers']
     collection.delete_many({})
     for server in config.servers:
-        collection.insert_one({**server, 'info_path': config.api_server_record_path, 'records': None})
+        collection.insert_one({**server, 'server_id': str(uuid4()), 'info_path': config.api_server_record_path, 'records': None})
     print(f"Done.", file=sys.stderr)
     
-
 
 def valid_user(db: pymongo.database.Database, username: str, password: str) -> bool:
     collection = db['users']
@@ -47,9 +47,11 @@ def get_records(db):
     data = []
     for server in collection.find():
         # print(server)
-        record = server['record']
-        if record is not None:
-            data.append(record)
+        # record = server['records']
+        # if record is not None:
+            # data.append(record)
+        server['_id'] = str(server['_id'])
+        data.append(server)
     print(data)
     return data
 
@@ -61,11 +63,16 @@ def update_records(db):
         try:
             r = requests.get(url)
             if r.status_code != 200:
-                print(f"{time.ctime(time.time())} | query {url} got status code {r.status_code}", file=sys.stderr)
+                print(f"{time.ctime()} | query {url} got status code {r.status_code}", file=sys.stderr)
                 continue
-            print(f"{time.ctime(time.time())} | updated records from {url}")
+            print(f"{time.ctime()} | updated records from {url}")
             collection.update_one({'_id': server['_id']}, {"$set": {"record": r.json()}})
         except:
-            print(f"{time.ctime(time.time())} | query {url} cause connection error", file=sys.stderr)
+            print(f"{time.ctime()} | query {url} cause connection error", file=sys.stderr)
+
+def send_killp_request(server, pid, username, password):
+    
+    pass
+
 
 
