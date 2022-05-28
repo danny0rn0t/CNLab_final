@@ -21,7 +21,7 @@ def parse_args():
 @app.route('/server-records', methods=['GET'])
 def query_records():
     if not valid_user(db, request.args.get('username'), request.args.get('password')):
-        return gen_reponse('FAILED', error_message='Invalid user!')
+        return gen_reponse('FAILED', message='Invalid user!')
     data = get_records(db)
     return gen_reponse('SUCCESSED', data=data)
     
@@ -31,16 +31,18 @@ def kill_process():
     username = request.values.get('username')
     password = request.values.get('password')
     if not valid_user(db, username, password):
-        return gen_reponse('FAILED', error_message='Invalid user!')
+        return gen_reponse('FAILED', message='Invalid user!')
     server_id = request.values.get('server_id')
     pid = request.values.get('pid')
     if server_id is None:
-        return gen_reponse('FAILED', error_message='Missing server_id!')
+        return gen_reponse('FAILED', message='Missing server_id!')
 
     collection = db['servers']
     server = collection.find_one({'server_id': server_id})
     if server is None:
-        return gen_reponse('FAILED', error_message=f'Server with server_id={server_id} not found!')
+        return gen_reponse('FAILED', message=f'Server with server_id={server_id} not found!')
+    return send_killp_request(server, pid, username, password)
+    
     
 
 

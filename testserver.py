@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import time
 import argparse
 app = Flask(__name__)
@@ -37,6 +37,14 @@ def query_records():
         ]
     }
     return jsonify(data)
+@app.route('/api/killp', methods=['POST'])
+def kill_process():
+    print(request.values())
+    data = {
+        "status": 'api server SUCCESSED'
+    }
+    return jsonify(data)
+
 if __name__ == '__main__':
     args = parse_args()
     app.run(host=args.host, port=args.port)

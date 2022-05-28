@@ -77,13 +77,14 @@ def send_killp_request(server, pid, username, password):
     time_stamp = time.ctime()
     signature = sha256(f"{pid}{time_stamp}{password}".encode('utf-8')).hexdigest()
     url = f"http://{server['ip']}:{server['port']}/{server['killp_path']}"
-    data = {'pid': pid, 'signature': signature, 'reqTime': time_stamp}
+    data = {'pid': pid, 'signature': signature, 'reqTime': time_stamp, 'username': username}
     try: 
         r = requests.post(url, data=data)
-        if r.status_code == 200:
-            pass
+        if r.status_code != 200:
+            return gen_reponse('FAILED', message=f"server replied {r.status_code}")
+        return gen_reponse('SUCCESSED', data=r.json())
     except:
-        pass
+        return gen_reponse('FAILED', message=f"server connection error")
 
 
 
