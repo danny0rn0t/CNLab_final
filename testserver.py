@@ -39,7 +39,7 @@ def query_records():
     return jsonify(data)
 @app.route('/api/killp', methods=['POST'])
 def kill_process():
-    print(request.values())
+    print(request.values)
     data = {
         "status": 'api server SUCCESSED'
     }
