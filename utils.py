@@ -3,6 +3,26 @@ import pymongo
 from flask import jsonify
 import sys
 import time
+from config import Config
+
+def init_db(db, config: Config):
+    '''
+    remove all documents in db
+    initialize users and servers from config.py
+    '''
+    print(f"Initializing database ... ", file=sys.stderr)
+    collection = db['users']
+    collection.delete_many({})
+    for user in config.users:
+        collection.insert_one(user)
+    
+    collection = db['servers']
+    collection.delete_many({})
+    for server in config.servers:
+        collection.insert_one({**server, 'info_path': config.api_server_record_path, 'records': None})
+    print(f"Done.", file=sys.stderr)
+    
+
 
 def valid_user(db: pymongo.database.Database, username: str, password: str) -> bool:
     collection = db['users']
@@ -38,10 +58,14 @@ def update_records(db):
     for server in collection.find():
         url = f"http://{server['ip']}:{server['port']}/{server['info_path']}"
         
-        r = requests.get(url)
-        if r.status_code != 200:
-            print(f"{time.ctime(time.time())} | query {url} got status code {r.status_code}", file=sys.stderr)
-            continue
-        collection.update_one({'_id': server['_id']}, {"$set": {"record": r.json()}})
+        try:
+            r = requests.get(url)
+            if r.status_code != 200:
+                print(f"{time.ctime(time.time())} | query {url} got status code {r.status_code}", file=sys.stderr)
+                continue
+            print(f"{time.ctime(time.time())} | updated records from {url}")
+            collection.update_one({'_id': server['_id']}, {"$set": {"record": r.json()}})
+        except:
+            print(f"{time.ctime(time.time())} | query {url} cause connection error", file=sys.stderr)
 
 

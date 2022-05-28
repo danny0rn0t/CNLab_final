@@ -1,6 +1,7 @@
 import json
 from flask import Flask, jsonify, request
-import configparser
+# import configparser
+from config import Config
 import os
 from pymongo import MongoClient
 from flask_apscheduler import APScheduler
@@ -32,12 +33,14 @@ def kill_process():
 if __name__ == '__main__':
     ''' set up configs '''
     args = parse_args()
-    config = configparser.ConfigParser()
-    config.read(os.path.abspath(os.path.join(".ini")))
+    config = Config()
 
     ''' connect to mongodb '''
-    client = MongoClient(config['PROD']['DB_URI'])
+    client = MongoClient(config.DB_URI)
     db = client['cnlab']
+
+    ''' init database '''
+    init_db(db, config)
 
     ''' update record for every 5 seconds'''
     scheduler.add_job(id = 'Scheduled Task', func=update_records, trigger="interval", seconds=5, args=[db])
