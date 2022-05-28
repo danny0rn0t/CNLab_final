@@ -4,6 +4,7 @@ class Config:
     
     ''' api server configuration'''
     api_server_record_path = 'api/fetchInfo'
+    api_server_killp_path = 'api/killp'
 
     ''' 
     default servers,

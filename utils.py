@@ -5,6 +5,7 @@ import sys
 import time
 from config import Config
 from uuid import uuid4
+from hashlib import sha256
 
 def init_db(db, config: Config):
     '''
@@ -20,7 +21,7 @@ def init_db(db, config: Config):
     collection = db['servers']
     collection.delete_many({})
     for server in config.servers:
-        collection.insert_one({**server, 'server_id': str(uuid4()), 'info_path': config.api_server_record_path, 'records': None})
+        collection.insert_one({**server, 'server_id': str(uuid4()), 'info_path': config.api_server_record_path, 'killp_path': config.api_server_killp_path, 'records': None})
     print(f"Done.", file=sys.stderr)
     
 
@@ -31,14 +32,14 @@ def valid_user(db: pymongo.database.Database, username: str, password: str) -> b
         return False
     return True
 
-def gen_reponse(status, data='', error_message=''):
+def gen_reponse(status, data='', message=''):
     '''
     status: ['SUCCESSED', 'FAILED']
     '''
     res = {
         'status': status,
         'data': data,
-        'error_message': error_message
+        'message': message
     }
     return jsonify(res)
 
@@ -71,8 +72,18 @@ def update_records(db):
             print(f"{time.ctime()} | query {url} cause connection error", file=sys.stderr)
 
 def send_killp_request(server, pid, username, password):
-    
-    pass
+    if isinstance(pid, int):
+        pid = str(pid)
+    time_stamp = time.ctime()
+    signature = sha256(f"{pid}{time_stamp}{password}".encode('utf-8')).hexdigest()
+    url = f"http://{server['ip']}:{server['port']}/{server['killp_path']}"
+    data = {'pid': pid, 'signature': signature, 'reqTime': time_stamp}
+    try: 
+        r = requests.post(url, data=data)
+        if r.status_code == 200:
+            pass
+    except:
+        pass
 
 
 
