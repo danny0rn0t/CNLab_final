@@ -30,5 +30,5 @@ curl -X GET "127.0.0.1:5000/server-records?username=testuser1&password=1234"
 ```
 kill process
 ```shell=
-curl -X POST -d 'username=testuser1' -d 'password=1234' -d 'server_id=<server_id>' 127.0.0.1:5000/kill-process
+curl -X POST -d 'username=testuser1' -d 'password=1234' -d 'server_id=<server_id>' -d 'pid=<pid>' 127.0.0.1:5000/kill-process
 ```
