@@ -67,7 +67,7 @@ def update_records(db):
                 print(f"{time.ctime()} | query {url} got status code {r.status_code}", file=sys.stderr)
                 continue
             print(f"{time.ctime()} | updated records from {url}")
-            collection.update_one({'_id': server['_id']}, {"$set": {"record": r.json()}})
+            collection.update_one({'_id': server['_id']}, {"$set": {"records": r.json()}})
         except:
             print(f"{time.ctime()} | query {url} cause connection error", file=sys.stderr)
 
