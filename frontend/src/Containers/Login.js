@@ -1,14 +1,20 @@
 import LoginContainer from "../Components/LoginContainer";
 import Logo from "../Components/Logo";
 import { Button, message, Row, Space, Input } from "antd";
-import { useState } from "react";
+import axios from "../axios"
 
-const Login = ({ setLogin, setToken }) => {
-  const [account, setAccount] = useState(
-    localStorage.getItem("save-account") || ""
-  );
-  const [pw, setPw] = useState(localStorage.getItem("save-pw") || "");
-  const login = async () => {};
+const Login = ({ setLogin, pw, user, setPw, setUser }) => {
+  const login = async () => {
+    let {data: res} = await axios.get("/server-records", {
+      params: {
+        username: user,
+        password: pw,
+      },
+    });
+    console.log(res)
+    if (res.status === "SUCCESSED") setLogin(true);
+    else message.error(res.message);
+  };
   return (
     <div
       style={{ backgroundColor: "#ffffff", width: "100vw", height: "100vh" }}
@@ -21,9 +27,9 @@ const Login = ({ setLogin, setToken }) => {
         >
           <Logo style={{ fontSize: "600%", marginLeft: "0" }}>CNL9</Logo>
           <Input
-            value={account}
+            value={user}
             onChange={(e) => {
-              setAccount(e.target.value);
+              setUser(e.target.value);
             }}
             placeholder="電子郵件帳號"
             size="large"

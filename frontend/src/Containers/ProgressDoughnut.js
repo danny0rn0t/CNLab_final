@@ -4,7 +4,6 @@ const ProgressDoughnut = ({ data, title }) => {
   const chartRef = useRef();
   useEffect(() => {
     const chart = chartRef.current;
-    console.log(chart.data);
     if (chart) chart.update();
   }, []);
   return (
@@ -16,7 +15,7 @@ const ProgressDoughnut = ({ data, title }) => {
             {
               label: title,
               backgroundColor: ["rgb(68, 136, 0)", "e9e9e9"],
-              data: [data, 100 - data],
+              data: [data.toFixed(2), 100 - data.toFixed(2)],
             },
           ],
         }}
@@ -45,7 +44,7 @@ const ProgressDoughnut = ({ data, title }) => {
               ctx.font = fontSize + "em sans-serif";
               ctx.fillStyle = "#9b9b9b";
               ctx.textBaseline = "middle";
-              var text = chart.data.datasets[0].percent + "%",
+              var text = chart.data.datasets[0].data[0] + "%",
                 textX = Math.round((width - ctx.measureText(text).width) / 2),
                 textY = height / 2;
               ctx.fillText(text, textX, textY);

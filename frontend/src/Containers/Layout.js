@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import ServerTable from "./ServerTable";
 const { Header, Content, Footer } = Layout;
-const CustomLayout = ({ setLogin, token }) => {
+const CustomLayout = ({ setLogin, user, pw }) => {
   let location = useLocation();
   const [active, setActive] = useState(0);
   return (
@@ -53,7 +53,7 @@ const CustomLayout = ({ setLogin, token }) => {
         </Breadcrumb>
         <div>
           <Routes>
-            <Route path="/" element={<ServerTable />} />
+            <Route path="/" element={<ServerTable user={user} pw={pw} />} />
             <Route path="/account/:accountId" element={null} />
           </Routes>
         </div>

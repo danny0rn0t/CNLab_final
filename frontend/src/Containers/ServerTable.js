@@ -1,68 +1,49 @@
-import { Collapse } from "antd";
+import { Collapse, message } from "antd";
 import ServerPanel from "./ServerPanel";
+import axios from "../axios";
+import { useEffect, useState } from "react";
 const { Panel } = Collapse;
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
-let mocked_data = [
-  {
-    host: "server 1",
-    // N cores, N items, unit: %
-    CPUS: [0, 0, 10.9, 20],
-    // unit: MB
-    MEM_USE: 4096,
-    MEM_TOT: 16384,
-    PROCESS: [
-      {
-        pid: 12345,
-        owner: "userA",
-        cpu: 10.9, // %
-        mem: 1024, // MB
-        cmd: "python3 -m http.server 8080",
-      },
-      {
-        pid: 12456,
-        owner: "userB",
-        cpu: 20, // %
-        mem: 3072, // MB
-        cmd: "python3 train.py",
-      },
-    ],
-  },
-  {
-    host: "server 2",
-    // N cores, N items, unit: %
-    CPUS: [0, 0, 10.9, 10],
-    // unit: MB
-    MEM_USE: 3072,
-    MEM_TOT: 16384,
-    PROCESS: [
-      {
-        pid: 12345,
-        owner: "userC",
-        cpu: 10.9, // %
-        mem: 1024, // MB
-        cmd: "python3 -m http.server 8080",
-      },
-      {
-        pid: 12456,
-        owner: "userD",
-        cpu: 10, // %
-        mem: 2048, // MB
-        cmd: "python3 train.py",
-      },
-    ],
-  },
-];
-const ServerTable = () => {
+
+const ServerTable = ({ user, pw }) => {
+  const [data, setData] = useState([]);
+  const [refresh, setRefresh] = useState(true);
+
+  useEffect(() => {
+    setInterval(() => {
+      setRefresh(true);
+    }, 10 * 1000);
+  }, []);
+  useEffect(() => {
+    if (refresh) {
+      const fetchServers = async () => {
+        let { data: res } = await axios.get("/server-records", {
+          params: {
+            username: user,
+            password: pw,
+          },
+        });
+        if (res.status === "SUCCESSED") setData(res.data);
+        else message.error(res.message);
+      };
+      fetchServers();
+      setRefresh(false);
+    }
+  }, [refresh, user, pw]);
   return (
-    <Collapse defaultActiveKey={["1"]}>
-      {mocked_data.map((x, i) => {
+    <Collapse defaultActiveKey={["0"]}>
+      {data.map((x, i) => {
         return (
-          <Panel header={x["host"]} key={i}>
-            <ServerPanel data={x} />
+          <Panel header={x["Server_name"]} key={i}>
+            {x["records"] ? (
+              <ServerPanel
+                setRefresh={setRefresh}
+                user={user}
+                pw={pw}
+                data={x}
+              />
+            ) : (
+              "No data"
+            )}
           </Panel>
         );
       })}
