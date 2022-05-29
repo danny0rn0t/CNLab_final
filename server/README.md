@@ -7,6 +7,7 @@ packages
 * crypto-js
 * async-mutex
 * node-fetch(not neccesary for api_server, but for the test file client.mjs)
+* systeminformation
 
 install packages by 
 ```shell
