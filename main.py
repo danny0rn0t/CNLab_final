@@ -7,7 +7,10 @@ from flask_apscheduler import APScheduler
 from utils import *
 import argparse
 import requests
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
+
 scheduler = APScheduler()
 
 def parse_args():
