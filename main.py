@@ -61,7 +61,7 @@ if __name__ == '__main__':
     ''' init database '''
     init_db(db, config)
 
-    ''' update record for every 5 seconds'''
+    ''' update record for every 10 seconds'''
     scheduler.add_job(id = 'Scheduled Task', func=update_records, trigger="interval", seconds=10, args=[db])
     scheduler.start()
 
