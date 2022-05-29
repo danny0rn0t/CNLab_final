@@ -62,7 +62,8 @@ app.post(CMD_KILL, bodyParser.json(), async function(req, res){
 		console.log("authentication failed\n");
 	}
 	else{
-		let result = kill.KillProcess(user, pid, reqTime);
+		let result = await kill.killp(user, pid, reqTime);
+			console.log('result = ', result)
 		res.writeHead(200, {'Context-Type': 'text/plain'});
 		res.write(result);
 		res.end();

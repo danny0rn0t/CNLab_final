@@ -6,9 +6,10 @@ var http = require('http');
 var cryptojs = require('crypto-js');
 
 var port = 8888;
-var signature = cryptojs.SHA256('user13.5user1SecrET').toString(cryptojs.enc.Hex);
+var reqTime = Math.round(new Date().getTime()/1000);
+var signature = cryptojs.SHA256('kev' + reqTime + 'kev').toString(cryptojs.enc.Hex);
 var killpUrl = 'http://127.0.0.1:'+ port + '/api/killp';
-var fetchUrl = 'http://127.0.0.1:'+ port + '/api/fetchInfo?user=user1&pid=1234&reqTime=3.5&signature='+signature;
+var fetchUrl = 'http://127.0.0.1:'+ port + '/api/fetchInfo?user=kev&reqTime='+ reqTime +'&signature='+signature;
 
 
 function requestInfo(url) {
@@ -24,9 +25,9 @@ function requestKill(url) {
 	fetch(url, {
 		method:'POST',
 		body:JSON.stringify({
-			user:'user1',
-			pid:1234,
-			reqTime:3.5,
+			user:'kev',
+			pid: 49766,
+			reqTime:reqTime,
 			signature: signature
 		}),
 		headers: {
@@ -39,5 +40,5 @@ function requestKill(url) {
 	});
 }
 setInterval(requestInfo, 3000, fetchUrl);
-//setInterval(requestKill, 5000, killpUrl);
+setInterval(requestKill, 2000, killpUrl);
 

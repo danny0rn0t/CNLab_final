@@ -1,11 +1,11 @@
 const si = require('systeminformation');
-const KillProcess  = async ([user, pid, reqTime]) =>{
+const KillProcess  = async (user, pid, reqTime) =>{
 
     process_info = si.processes()
     process_info = await process_info
     CheckreqTime = false
     CheckUser = false
-    const expireTime = 3;  //second 
+    const expireTime = 300;  //second 
     const nowTime = Math.round(new Date().getTime()/1000);  // second 
     if (nowTime - reqTime <= expireTime){
         CheckreqTime = true
