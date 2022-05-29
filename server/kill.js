@@ -5,7 +5,7 @@ const KillProcess  = async (user, pid, reqTime) =>{
     process_info = await process_info
     CheckreqTime = false
     CheckUser = false
-    const expireTime = 300;  //second 
+    const expireTime = 3;  //second 
     const nowTime = Math.round(new Date().getTime()/1000);  // second 
     if (nowTime - reqTime <= expireTime){
         CheckreqTime = true
@@ -17,7 +17,7 @@ const KillProcess  = async (user, pid, reqTime) =>{
         }
     }
     if(CheckreqTime && CheckUser){
-        process.kill(pid, 'SIGINT');
+        process.kill(pid, 'SIGTERM');
         let response = 'kill success'
         return response
     }
