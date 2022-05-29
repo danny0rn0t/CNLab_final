@@ -12,7 +12,7 @@ const CMD_FETCH = '/api/fetchInfo';
 const CMD_KILL = '/api/killp';
 
 var fetch = require('./fetch.js');
-var killp = require('./killp.js')
+var kill = require('./kill.js')
 const port = 8888;
 const processInfo_path = './processInfo.json'
 const userInfo_path = './userInfo.json'
@@ -62,7 +62,7 @@ app.post(CMD_KILL, bodyParser.json(), async function(req, res){
 		console.log("authentication failed\n");
 	}
 	else{
-		let result = killp.killp(user, pid, reqTime);
+		let result = kill.KillProcess(user, pid, reqTime);
 		res.writeHead(200, {'Context-Type': 'text/plain'});
 		res.write(result);
 		res.end();
@@ -80,7 +80,7 @@ var server = app.listen(port, function () {
 async function fetchInfo(path){
 	const release = await mutex.acquire();
 	try{
-		fetchInfo.fetchInfo(path);
+		fetch.fetchInfo(path);
 	} finally{
 		release();
 	}

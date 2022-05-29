@@ -1,5 +1,5 @@
 const si = require('systeminformation');
-const KillProcess  = ([user, pid, reqTime]) =>{
+const KillProcess  = async ([user, pid, reqTime]) =>{
 
     process_info = si.processes()
     process_info = await process_info
@@ -26,8 +26,4 @@ const KillProcess  = ([user, pid, reqTime]) =>{
         return response
     }
 }
-export { KillProcess }
-
-
-
-
+exports.killp =  KillProcess

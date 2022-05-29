@@ -41,7 +41,7 @@ const fetchInfo = async (path) => {
     lock.unlock()
 }
 
-export { fetchInfo }
+exports.fetchInfo = fetchInfo
 // Usage
 //fetchInfo("./info.json")
 

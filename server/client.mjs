@@ -39,5 +39,5 @@ function requestKill(url) {
 	});
 }
 setInterval(requestInfo, 3000, fetchUrl);
-setInterval(requestKill, 5000, killpUrl);
+//setInterval(requestKill, 5000, killpUrl);
 
