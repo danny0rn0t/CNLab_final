@@ -1,0 +1,10 @@
+[
+	{
+		"user": "user1",
+		"user_secret": "user1SecrET"
+	},
+	{
+		"user": "user2",
+		"user_secret": "user2SECRET"
+	}
+]
