@@ -44,6 +44,7 @@ def kill_process():
     server = collection.find_one({'server_id': server_id})
     if server is None:
         return gen_reponse('FAILED', message=f'Server with server_id={server_id} not found!')
+    print(f"sending killp request | username={username} | password={password} | server_id={server_id} | pid={pid}")
     return send_killp_request(server, pid, username, password)
     
     
@@ -62,7 +63,7 @@ if __name__ == '__main__':
     init_db(db, config)
 
     ''' update record for every 10 seconds'''
-    scheduler.add_job(id = 'Scheduled Task', func=update_records, trigger="interval", seconds=10, args=[db])
+    scheduler.add_job(id = 'Scheduled Task', func=update_records, trigger="interval", seconds=10, args=[db, config])
     scheduler.start()
 
     app.run()

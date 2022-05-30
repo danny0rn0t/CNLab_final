@@ -5,6 +5,7 @@ import sys
 import time
 from config import Config
 from uuid import uuid4
+import json
 from hashlib import sha256
 
 def init_db(db, config: Config):
@@ -56,13 +57,17 @@ def get_records(db):
     print(data)
     return data
 
-def update_records(db):
+def update_records(db, config: Config):
     collection = db['servers']
+    time_stamp = time.ctime()
+    user = config.users[0]['username']
+    secret = config.users[0]['password']
+    signature = sha256(f"{user}{time_stamp}{secret}".encode('utf-8')).hexdigest()
     for server in collection.find():
         url = f"http://{server['ip']}:{server['port']}/{server['info_path']}"
         
         try:
-            r = requests.get(url)
+            r = requests.get(url, params={"user": user, "signature": signature, "reqTime": time_stamp})
             if r.status_code != 200:
                 print(f"{time.ctime()} | query {url} got status code {r.status_code}", file=sys.stderr)
                 continue
@@ -72,19 +77,17 @@ def update_records(db):
             print(f"{time.ctime()} | query {url} cause connection error", file=sys.stderr)
 
 def send_killp_request(server, pid, username, password):
-    if isinstance(pid, int):
-        pid = str(pid)
-    time_stamp = time.ctime()
-    signature = sha256(f"{pid}{time_stamp}{password}".encode('utf-8')).hexdigest()
+    time_stamp = int(time.time())
+    signature = sha256(f"{username}{time_stamp}{password}".encode('utf-8')).hexdigest()
     url = f"http://{server['ip']}:{server['port']}/{server['killp_path']}"
-    data = {'pid': pid, 'signature': signature, 'reqTime': time_stamp, 'username': username}
+    data = {'pid': pid, 'signature': signature, 'reqTime': time_stamp, 'user': username}
     try: 
-        r = requests.post(url, data=data)
-        if r.status_code != 200:
-            return gen_reponse('FAILED', message=f"server replied {r.status_code}")
-        return gen_reponse('SUCCESSED', data=r.json())
+        r = requests.post(url, json=data)
     except:
         return gen_reponse('FAILED', message=f"server connection error")
+    if r.status_code != 200:
+        return gen_reponse('FAILED', message=f"server replied {r.status_code}")
+    return gen_reponse('SUCCESSED', data=r.json())
 
 
 

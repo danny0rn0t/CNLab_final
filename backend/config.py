@@ -20,21 +20,18 @@ class Config:
             'Server_name': 'Test Server 2',
             'ip': '140.112.31.182',
             'port': 5002,
+        },
+        {
+            'Server_name': 'local',
+            'ip': '127.0.0.1',
+            'port': 8888,
         }
     ]
 
     ''' default users '''
     users = [
         {
-            'username': 'testuser1',
-            'password': '1234'
-        },
-        {
-            'username': 'testuser2',
-            'password': '2222'
-        },
-        {
-            'username': 'user1',
-            'password': 'user1SecrET'
-        }
+		    "username": "danny",
+		    "password": "danny"
+	    }
     ]

@@ -10,5 +10,9 @@
 	{
 		"user": "kev",
 		"user_secret": "kev"
+	},
+	{
+		"user": "danny",
+		"user_secret": "danny"
 	}
 ]

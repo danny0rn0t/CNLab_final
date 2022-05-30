@@ -45,7 +45,7 @@ app.get(CMD_FETCH, async function(req, res){
 			data = JSON.parse(data);
 			data.PROCESS = data.PROCESS.filter(entry => entry.owner == user)
 			res.writeHead(200, {'Context-Type': 'application/json'});
-			console.log(data);
+			// console.log(data);
 			res.write(JSON.stringify(data));
 			res.end();
 		});
@@ -65,7 +65,7 @@ app.post(CMD_KILL, bodyParser.json(), async function(req, res){
 		let result = await kill.killp(user, pid, reqTime);
 			console.log('result = ', result)
 		res.writeHead(200, {'Context-Type': 'text/plain'});
-		res.write(result);
+		res.write(JSON.stringify({"status": result}));
 		res.end();
 	}
 
