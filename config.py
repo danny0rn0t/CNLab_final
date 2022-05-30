@@ -32,5 +32,9 @@ class Config:
         {
             'username': 'testuser2',
             'password': '2222'
+        },
+        {
+            'username': 'user1',
+            'password': 'user1SecrET'
         }
     ]
