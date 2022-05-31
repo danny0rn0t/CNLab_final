@@ -10,9 +10,7 @@ packages
 
 install packages by 
 ```shell
-npm install crypto-js
-npm install express
-npm install async-mutex
+npm install
 ```
 ## Deploy 
 1. setup users' information in userInfo.json
