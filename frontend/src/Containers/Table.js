@@ -1,5 +1,5 @@
 import { Button, Table, message } from "antd";
-import axios from "../axios";
+import axios from "axios";
 const CustomTable = ({ data, user, pw, server_id, setRefresh }) => {
   const columns = [
     {
@@ -38,7 +38,7 @@ const CustomTable = ({ data, user, pw, server_id, setRefresh }) => {
             ghost
             onClick={async () => {
               const { data: res } = await axios.post(
-                "kill-process",
+                "http://localhost:5000/kill-process",
                 {},
                 {
                   params: {

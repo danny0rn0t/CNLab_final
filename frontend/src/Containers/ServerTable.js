@@ -1,6 +1,6 @@
 import { Collapse, message } from "antd";
 import ServerPanel from "./ServerPanel";
-import axios from "../axios";
+import axios from "axios";
 import { useEffect, useState } from "react";
 const { Panel } = Collapse;
 
@@ -16,7 +16,7 @@ const ServerTable = ({ user, pw }) => {
   useEffect(() => {
     if (refresh) {
       const fetchServers = async () => {
-        let { data: res } = await axios.get("/server-records", {
+        let { data: res } = await axios.get("http://localhost:5000/server-records", {
           params: {
             username: user,
             password: pw,

@@ -1,17 +1,20 @@
 import LoginContainer from "../Components/LoginContainer";
 import Logo from "../Components/Logo";
 import { Button, message, Row, Space, Input } from "antd";
-import axios from "../axios"
+import axios from "axios";
 
 const Login = ({ setLogin, pw, user, setPw, setUser }) => {
   const login = async () => {
-    let {data: res} = await axios.get("/server-records", {
-      params: {
-        username: user,
-        password: pw,
-      },
-    });
-    console.log(res)
+    let { data: res } = await axios.get(
+      "http://localhost:5000/server-records",
+      {
+        params: {
+          username: user,
+          password: pw,
+        },
+      }
+    );
+    console.log(res);
     if (res.status === "SUCCESSED") setLogin(true);
     else message.error(res.message);
   };
