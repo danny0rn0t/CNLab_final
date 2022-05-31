@@ -1,3 +1,4 @@
 node_modules
 __pycache__
 processInfo.json
+frontend/node_modules/*
