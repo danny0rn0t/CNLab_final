@@ -31,7 +31,7 @@ class Config:
     ''' default users '''
     users = [
         {
-		    "username": "danny",
+		    "username": "joshuayou",
 		    "password": "danny"
 	    }
     ]
